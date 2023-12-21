@@ -1,0 +1,42 @@
+
+int digit[10][7] = {   {1,1,1,1,1,1,0},  //0
+              {0,1,1,0,0,0,0},  //1
+              {1,1,0,1,1,0,1},  //2
+              {1,1,1,1,0,0,1},  //3
+              {0,1,1,0,0,1,1},  //4
+              {1,0,1,1,0,1,1},  //5
+              {1,0,1,1,1,1,1},  //6
+              {1,1,1,0,0,0,0},  //7
+              {1,1,1,1,1,1,1}, //8
+              {1,1,1,1,0,1,1}  //9
+};
+int x,y,z,counter;
+
+void setup() {
+
+  for(x=1;x<=9;x++) {
+    pinMode(x, OUTPUT);
+  }
+}
+void loop() {
+    for(counter=0;counter<100;counter++) {   // main loop//
+
+        for(z=1;z<=40;z++) {                                                 //inside 2 loops//
+        digitalWrite(8, LOW);
+                     for(y=0;y<=6;y++) {
+                          digitalWrite(y+1,digit[counter/10][y]);
+          
+                                       }
+         delay(10);
+         digitalWrite(8,HIGH);
+         digitalWrite(9, LOW);
+                      for(y=0;y<=6;y++) {
+                                       digitalWrite(y+1,digit[counter%10][y]);
+                                        }
+         delay(10);
+         digitalWrite(9, HIGH);
+                                      
+                         }
+          
+                                          }
+           }                            

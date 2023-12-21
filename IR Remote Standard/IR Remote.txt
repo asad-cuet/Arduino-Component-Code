@@ -1,0 +1,145 @@
+#include <IRremote.h>
+
+#define PIN_RECEIVER 2   // Signal Pin of IR receiver
+
+IRrecv receiver(PIN_RECEIVER);
+
+
+
+//Oled display
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 32 // OLED display height, in pixels
+#define OLED_RESET 4
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+
+void setup()
+{
+  
+  
+  receiver.enableIRIn(); // Start the receiver
+
+
+
+  //Oled display
+
+  Serial.begin(9600);
+  // by default, we'll generate the high voltage from the 3.3v line internally! (neat!)
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3C (for the 128x32)// Check your I2C address and enter it here, in Our case address is 0x3C
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.clearDisplay();
+  display.setCursor(0,0);
+  display.print("<press a button>");
+  display.display(); // this command will display all the data which is in buffer
+
+
+
+   
+
+
+
+   }
+
+void loop()
+{
+  
+
+  
+
+  
+  
+  
+  
+  // Checks received an IR signal
+  if (receiver.decode()) {
+    translateIR();
+    receiver.resume();  // Receive the next value
+  }
+}
+
+void oledPrint(char* text)
+{
+   display.clearDisplay();
+   display.setCursor(0,0);
+   display.println("button pressed:");
+  display.print(text);
+  display.println("code: ");
+  display.print(receiver.decodedIRData.command);
+  display.display();
+}
+
+void translateIR()
+{
+  // Takes command based on IR code received
+  switch (receiver.decodedIRData.command) {
+    case 162:
+      oledPrint("POWER");
+      break;
+    case 226:
+      oledPrint("MENU");
+      break;
+    case 34:
+      oledPrint("TEST");
+      break;
+    case 2:
+      oledPrint("PLUS");
+      break;
+    case 194:
+      oledPrint("BACK");
+      break;
+    case 224:
+      oledPrint("PREV.");
+      break;
+    case 168:
+      oledPrint("PLAY");
+      break;
+    case 144:
+      oledPrint("NEXT");
+      break;
+    case 104:
+      oledPrint("num: 0");
+      break;
+    case 152:
+      oledPrint("MINUS");
+      break;
+    case 176:
+      oledPrint("key: C");
+      break;
+    case 48:
+      oledPrint("num: 1");
+      break;
+    case 24:
+      oledPrint("num: 2");
+      break;
+    case 122:
+      oledPrint("num: 3");
+      break;
+    case 16:
+      oledPrint("num: 4");
+      break;
+    case 56:
+      oledPrint("num: 5");
+      break;
+    case 90:
+      oledPrint("num: 6");
+      break;
+    case 66:
+      oledPrint("num: 7");
+      break;
+    case 74:
+      oledPrint("num: 8");
+      break;
+    case 82:
+      oledPrint("num: 9");
+      break;
+    default:
+      display.clearDisplay();
+      display.print(receiver.decodedIRData.command);
+      display.print(" other button");
+  }
+}
